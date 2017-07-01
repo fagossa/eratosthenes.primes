@@ -11,7 +11,8 @@ class Master(upper: Int, actors: ActorRefs) extends Actor {
   def receive: Receive = {
     case Find =>
       source = sender
-      (2 to upper) foreach { n => actors(Worker.name) ! Filter(n) }
+      val masterRef = context.actorSelection(s"/user/${Worker.name}")
+      (2 to upper) foreach { n => masterRef ! Filter(n) }
 
     case Result(list) =>
       source ! list

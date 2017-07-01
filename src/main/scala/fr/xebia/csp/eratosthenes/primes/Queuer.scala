@@ -9,11 +9,14 @@ class Queuer(upper: Int, actors: ActorRefs) extends Actor {
   private var other: Option[List[Int]] = None
   private var expectedMessages = ((upper - 1) * 2) - 1
 
+  private val workerRef = context.actorSelection(s"/user/${Worker.name}")
+  private val masterRef = context.actorSelection(s"/user/${Master.name}")
+
   def receive: Receive = {
     case Enqueue(list) =>
       expectedMessages -= 1
       if (expectedMessages == 0) {
-        actors(Master.name) ! Result(list)
+        masterRef ! Result(list)
       }
       else {
         process(list)
@@ -23,7 +26,7 @@ class Queuer(upper: Int, actors: ActorRefs) extends Actor {
   private def process(list: List[Int]) {
     other match {
       case Some(o) =>
-        actors(Worker.name) ! Merge(list, o)
+        workerRef ! Merge(list, o)
         other = None
       case None =>
         other = Some(list)

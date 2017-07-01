@@ -7,12 +7,14 @@ import fr.xebia.csp.eratosthenes.primes.Messages.{Enqueue, Filter, Merge}
 import scala.collection.mutable
 
 class Worker(upper: Int, actors: ActorRefs) extends Actor {
+  private val queuerRef = context.actorSelection(s"/user/${Queuer.name}")
+
   def receive: Receive = {
     case Filter(n) =>
-      actors(Queuer.name) ! Enqueue((2 to upper).toList filter (x => x == n || x % n != 0))
+      queuerRef ! Enqueue((2 to upper).toList filter (x => x == n || x % n != 0))
 
     case Merge(left, right) =>
-      actors(Queuer.name) ! Enqueue(left intersect right)
+      queuerRef ! Enqueue(left intersect right)
   }
 }
 
