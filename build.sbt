@@ -1,13 +1,19 @@
-name := "erasthosthenes-akka"
+import sbt.Keys.scalaVersion
 
-version := "1.0"
+import Dependencies._
 
-scalaVersion := "2.12.2"
-
-lazy val akkaVersion = "2.5.3"
-
-libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-  "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
-)
+lazy val root = project.in(file("."))
+  .settings(
+    inThisBuild(
+      Seq(
+        organization := "com.example",
+        version := "1.0",
+        scalaVersion := "2.12.2",
+        version := "0.1"
+      )
+    ),
+    name := "erasthosthenes-akka"
+  )
+  .settings(
+    libraryDependencies ++= Seq(Akka, AkkaTestKit, ScalaTest)
+  )

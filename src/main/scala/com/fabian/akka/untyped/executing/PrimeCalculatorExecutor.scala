@@ -1,9 +1,9 @@
-package fr.xebia.csp.eratosthenes.executing
+package com.fabian.akka.untyped.executing
 
 import akka.actor.ActorSystem
 import akka.pattern.after
 import akka.util.Timeout
-import fr.xebia.csp.eratosthenes.primes.PrimeFinderCalculator
+import com.fabian.akka.untyped.primes.PrimeFinder
 
 import scala.concurrent.duration._
 import scala.concurrent.{Future, TimeoutException}
@@ -18,16 +18,10 @@ object PrimeCalculatorExecutor extends App {
   private val duration = 20 seconds
   implicit val timeout = Timeout(duration)
 
-  val upper = 100
-  val eventualPrimes = PrimeFinderCalculator(upper)
+  val upper = 1000
+  val resultPrimes = PrimeFinder(upper)
 
-  lazy val t = after(
-    duration = duration,
-    using = system.scheduler)(Future.failed(new TimeoutException("Timed out!")))
-
-  val response = Future firstCompletedOf Seq(eventualPrimes, t)
-
-  response.onComplete {
+  resultPrimes.onComplete {
     case Success(primes) =>
       println(primes)
       system.terminate()
