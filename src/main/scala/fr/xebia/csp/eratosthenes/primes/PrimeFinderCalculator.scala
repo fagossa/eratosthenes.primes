@@ -1,13 +1,11 @@
 package fr.xebia.csp.eratosthenes.primes
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.ActorSystem
 import akka.pattern.ask
 import akka.util.Timeout
-import fr.xebia.csp.eratosthenes.primes.Messages._
+import fr.xebia.csp.eratosthenes.primes.Master.Messages._
 
-import scala.collection.mutable
 import scala.concurrent.Future
-
 
 object PrimeFinderCalculator {
 
@@ -16,13 +14,9 @@ object PrimeFinderCalculator {
     if (upper < 2) {
       Future.successful(Nil)
     } else {
-      val actors = new mutable.HashMap[String, ActorRef]
-
-      val master = system.actorOf(Master.props(upper, actors), name = "master")
-      val queuer = system.actorOf(Queuer.props(upper, actors), name = "queuer")
-      val worker = system.actorOf(Worker.props(upper, nrOfWorkers, actors), name = "worker")
-
-      actors += ("master" -> master, "queuer" -> queuer, "worker" -> worker)
+      val master = system.actorOf(Master.props(upper), name = "master")
+      val queuer = system.actorOf(Queuer.props(upper), name = "queuer")
+      val _ = system.actorOf(Worker.props(upper, nrOfWorkers), name = "worker")
 
       (master ? Find).mapTo[List[Int]]
     }

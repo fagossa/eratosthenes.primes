@@ -1,11 +1,10 @@
 package fr.xebia.csp.eratosthenes.primes
 
-import akka.actor.{Actor, ActorRef, Props}
-import fr.xebia.csp.eratosthenes.primes.Messages.{Enqueue, Merge, Result}
+import akka.actor.{Actor, Props}
+import fr.xebia.csp.eratosthenes.primes.Master.Messages.Result
+import fr.xebia.csp.eratosthenes.primes.Queuer.Messages.Enqueue
 
-import scala.collection.mutable
-
-class Queuer(upper: Int, actors: ActorRefs) extends Actor {
+class Queuer(upper: Int) extends Actor {
   private var other: Option[List[Int]] = None
   private var expectedMessages = ((upper - 1) * 2) - 1
 
@@ -26,7 +25,7 @@ class Queuer(upper: Int, actors: ActorRefs) extends Actor {
   private def process(list: List[Int]) {
     other match {
       case Some(o) =>
-        workerRef ! Merge(list, o)
+        workerRef ! Worker.Messages.Merge(list, o)
         other = None
       case None =>
         other = Some(list)
@@ -37,6 +36,13 @@ class Queuer(upper: Int, actors: ActorRefs) extends Actor {
 object Queuer {
   val name: String = "queuer"
 
-  def props(upper: Int, actors: mutable.HashMap[String, ActorRef]) =
-    Props(new Queuer(upper, actors))
+  def props(upper: Int) =
+    Props(new Queuer(upper))
+
+  object Messages {
+
+    final case class Enqueue(list: List[Int])
+
+  }
+
 }
