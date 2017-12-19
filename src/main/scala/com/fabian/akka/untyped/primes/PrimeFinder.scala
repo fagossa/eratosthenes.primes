@@ -8,8 +8,7 @@ import scala.concurrent.Future
 
 object PrimeFinder {
 
-  def apply(upper: Int, nrOfWorkers: Int = 2)
-           (implicit system: ActorSystem, timeout: Timeout): Future[List[Int]] = {
+  def apply(upper: Int, nrOfWorkers: Int = 2)(implicit system: ActorSystem, timeout: Timeout): Future[List[Int]] = {
     if (upper < 2) {
       Future.successful(Nil)
     } else {

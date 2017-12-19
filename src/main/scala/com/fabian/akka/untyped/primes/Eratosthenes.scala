@@ -12,12 +12,11 @@ class Eratosthenes extends Actor with ActorLogging {
           parent ! Master.Messages.Result(primes)
 
         case h :: tail =>
-
           self ! Sieve(parent, primes ++ List(h), tail.filter(notMultiplesOf(h)))
       }
   }
 
-  def notMultiplesOf(h: Int)(x : Int): Boolean = x % h != 0
+  def notMultiplesOf(h: Int)(x: Int): Boolean = x % h != 0
 
 }
 
