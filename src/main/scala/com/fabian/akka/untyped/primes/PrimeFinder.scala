@@ -1,22 +1,26 @@
 package com.fabian.akka.untyped.primes
 
-import akka.actor.ActorSystem
-import akka.pattern.ask
-import akka.util.Timeout
+import akka.actor.{Actor, ActorLogging, Props}
+import com.fabian.akka.untyped.primes.PrimeFinder.Messages.Start
 
-import scala.concurrent.Future
+class PrimeFinder extends Actor with ActorLogging {
 
-object PrimeFinder {
+  import akka.typed.scaladsl.adapter._
 
-  def apply(upper: Int, nrOfWorkers: Int = 2)(implicit system: ActorSystem, timeout: Timeout): Future[List[Int]] = {
-    if (upper < 2) {
-      Future.successful(Nil)
-    } else {
-      val master = system.actorOf(Master.props(upper), name = Master.name)
-      system.actorOf(Eratosthenes.props(), name = Eratosthenes.name)
+  val master = context.spawn(Master(), name = Master.name)
 
-      (master ? Master.Messages.FindPrimes).mapTo[List[Int]]
-    }
+  override def receive: Receive = {
+    case Start(upper) =>
+      if (upper < 2) sender ! Nil
+      else master ! Master.Messages.FindPrimes(upper, sender())
   }
 
+}
+
+object PrimeFinder {
+  def props(): Props = Props(new PrimeFinder())
+
+  object Messages {
+    case class Start(upper: Int)
+  }
 }

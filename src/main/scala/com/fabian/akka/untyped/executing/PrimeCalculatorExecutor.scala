@@ -1,13 +1,12 @@
 package com.fabian.akka.untyped.executing
 
-import akka.actor.ActorSystem
-import akka.pattern.after
+import akka.actor.{ActorRef, ActorSystem}
 import akka.util.Timeout
 import com.fabian.akka.untyped.primes.PrimeFinder
 
 import scala.concurrent.duration._
-import scala.concurrent.{Future, TimeoutException}
 import scala.util.{Failure, Success}
+import akka.pattern.ask
 
 object PrimeCalculatorExecutor extends App {
 
@@ -19,7 +18,9 @@ object PrimeCalculatorExecutor extends App {
   implicit val timeout = Timeout(duration)
 
   val upper = 1000
-  val resultPrimes = PrimeFinder(upper)
+  val primeFinder: ActorRef = system.actorOf(PrimeFinder.props())
+
+  val resultPrimes = (primeFinder ? PrimeFinder.Messages.Start(upper)).mapTo[List[Int]]
 
   resultPrimes.onComplete {
     case Success(primes) =>

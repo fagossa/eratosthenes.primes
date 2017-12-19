@@ -1,4 +1,4 @@
-Sieve of Eratosthenes
+Sieve of Eratosthenes using akka-typed
 ==========
 
 # Akka type

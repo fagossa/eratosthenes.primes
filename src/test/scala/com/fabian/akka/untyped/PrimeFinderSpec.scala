@@ -1,19 +1,22 @@
 package com.fabian.akka.untyped
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.TestKit
 import akka.util.Timeout
 import com.fabian.akka.untyped.primes.PrimeFinder
-import org.scalatest.concurrent.Eventually
+import com.fabian.akka.untyped.primes.PrimeFinder.Messages.Start
+import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import akka.pattern.ask
 
 class PrimeFinderSpec(_system: ActorSystem)
     extends TestKit(_system)
     with Matchers
     with WordSpecLike
     with BeforeAndAfterAll
-    with Eventually {
+    with Eventually
+    with ScalaFutures {
 
   implicit val ec = scala.concurrent.ExecutionContext.Implicits.global
 
@@ -25,9 +28,8 @@ class PrimeFinderSpec(_system: ActorSystem)
       List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
 
     "should handle values upper than 2" in {
-      PrimeFinder(100).map {
-        _ should be(primesUntil100)
-      }
+      val primeFinder: ActorRef = system.actorOf(PrimeFinder.props())
+      (primeFinder ? Start(100)).mapTo[List[Int]].futureValue should be(primesUntil100)
     }
 
   }
