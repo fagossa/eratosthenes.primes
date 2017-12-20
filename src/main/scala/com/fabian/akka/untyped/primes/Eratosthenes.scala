@@ -27,10 +27,13 @@ object Eratosthenes {
 
   object Messages {
 
-    sealed trait EratosthenesProtocol
+    sealed trait EratosthenesProtocol extends Product with Serializable
 
-    final case class Sieve(master: ActorRef[MasterProtocol], primes: List[Int], remaining: List[Int])
-        extends EratosthenesProtocol
+    final case class Sieve(
+      master: ActorRef[MasterProtocol],
+      primes: List[Int],
+      remaining: List[Int]
+    ) extends EratosthenesProtocol
 
   }
 

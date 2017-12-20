@@ -20,12 +20,13 @@ class PrimeFinderSpec(_system: ActorSystem)
 
   implicit val ec = scala.concurrent.ExecutionContext.Implicits.global
 
-  implicit val timeout = Timeout(Span(20, Seconds))
+  implicit val timeout = Timeout(Span(2, Seconds))
 
   "A primer calculator" must {
 
     val primesUntil100 =
-      List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
+      List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83,
+        89, 97)
 
     "should handle values upper than 2" in {
       val primeFinder: ActorRef = system.actorOf(PrimeFinder.props())
