@@ -14,19 +14,21 @@ object Master {
 
       val self = context.self
 
-      var clientRef: Option[ActorRef[List[Int]]] = None
+      def handleMessagesAndReplyTo(
+        clientRef: Option[ActorRef[List[Int]]]
+      ): Behavior[MasterProtocol] = {
+        Actor.immutable {
+          case (_, FindPrimes(upper, client)) =>
+            eratosthenesRef ! Eratosthenes.Messages.Sieve(self, Nil, (2 to upper).toList)
+            handleMessagesAndReplyTo(Some(client))
 
-      Actor.immutable {
-        case (_, FindPrimes(upper, client)) =>
-          eratosthenesRef ! Eratosthenes.Messages.Sieve(self, Nil, (2 to upper).toList)
-          clientRef = Some(client)
-          Actor.same
-
-        case (_, Result(list)) =>
-          clientRef.foreach(_ ! list)
-          Actor.same
-
+          case (_, Result(list)) =>
+            clientRef.foreach(_ ! list)
+            Actor.same
+        }
       }
+
+      handleMessagesAndReplyTo(None)
     }
   }
 

@@ -28,7 +28,12 @@ class PrimeFinderSpec(_system: ActorSystem)
       List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83,
         89, 97)
 
-    "should handle values upper than 2" in {
+    "handle values below 2" in {
+      val primeFinder: ActorRef = system.actorOf(PrimeFinder.props())
+      (primeFinder ? Start(1)).mapTo[List[Int]].futureValue should be(List.empty[Int])
+    }
+
+    "handle values above 2" in {
       val primeFinder: ActorRef = system.actorOf(PrimeFinder.props())
       (primeFinder ? Start(100)).mapTo[List[Int]].futureValue should be(primesUntil100)
     }

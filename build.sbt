@@ -16,6 +16,7 @@ lazy val root = project.in(file("."))
     licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
   )
   .settings(
+    fork in run := true,
     fmtSettings,
     scalacOptions ++= scalaCSettings,
     libraryDependencies ++= Seq(Akka, AkkaTestKit, ScalaTest)
