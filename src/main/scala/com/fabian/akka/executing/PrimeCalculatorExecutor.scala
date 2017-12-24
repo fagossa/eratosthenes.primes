@@ -1,8 +1,8 @@
-package com.fabian.akka.untyped.executing
+package com.fabian.akka.executing
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.util.Timeout
-import com.fabian.akka.untyped.primes.PrimeFinder
+import com.fabian.akka.primes.PrimeFinder
 
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}

@@ -1,9 +1,9 @@
-package com.fabian.akka.untyped.primes
+package com.fabian.akka.primes
 
 import Eratosthenes.Messages.{EratosthenesProtocol, Sieve}
 import akka.typed.scaladsl.Actor
 import akka.typed.{ActorRef, Behavior}
-import com.fabian.akka.untyped.primes.Master.Messages.MasterProtocol
+import com.fabian.akka.primes.Master.Messages.MasterProtocol
 
 object Eratosthenes {
   val name: String = "eratosthenes"

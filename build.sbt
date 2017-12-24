@@ -19,7 +19,7 @@ lazy val root = project.in(file("."))
     fork in run := true,
     fmtSettings,
     scalacOptions ++= scalaCSettings,
-    libraryDependencies ++= Seq(Akka, AkkaTestKit, ScalaTest)
+    libraryDependencies ++= Seq(Akka.Typed, Akka.TestKit, ScalaTest)
   )
 
 lazy val fmtSettings =

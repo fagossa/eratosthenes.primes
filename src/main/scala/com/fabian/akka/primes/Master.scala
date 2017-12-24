@@ -1,8 +1,8 @@
-package com.fabian.akka.untyped.primes
+package com.fabian.akka.primes
 
 import akka.typed.scaladsl.Actor
 import akka.typed.{ActorRef, Behavior}
-import com.fabian.akka.untyped.primes.Master.Messages.{FindPrimes, MasterProtocol, Result}
+import com.fabian.akka.primes.Master.Messages.{FindPrimes, MasterProtocol, Result}
 
 object Master {
 

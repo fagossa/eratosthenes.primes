@@ -1,10 +1,10 @@
-package com.fabian.akka.untyped
+package com.fabian.akka
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.TestKit
 import akka.util.Timeout
-import com.fabian.akka.untyped.primes.PrimeFinder
-import com.fabian.akka.untyped.primes.PrimeFinder.Messages.Start
+import com.fabian.akka.primes.PrimeFinder
+import com.fabian.akka.primes.PrimeFinder.Messages.Start
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}

@@ -1,7 +1,7 @@
-package com.fabian.akka.untyped.primes
+package com.fabian.akka.primes
 
 import akka.actor.{Actor, ActorLogging, Props}
-import com.fabian.akka.untyped.primes.PrimeFinder.Messages.Start
+import com.fabian.akka.primes.PrimeFinder.Messages.Start
 
 class PrimeFinder extends Actor with ActorLogging {
 

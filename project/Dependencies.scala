@@ -1,8 +1,13 @@
 import sbt._
 
 object Dependencies {
-  lazy val akkaVersion = "2.5.8"
-  val AkkaTestKit    = "com.typesafe.akka" %% "akka-testkit" % akkaVersion
-  val Akka           = "com.typesafe.akka" %% "akka-typed"   % akkaVersion
+
+  object Akka {
+    lazy val version     = "2.5.8"
+    lazy val Typed       = "com.typesafe.akka" %% "akka-typed"   % version
+    lazy val TestKit     = "com.typesafe.akka" %% "akka-testkit" % version
+  }
+
   lazy val ScalaTest = "org.scalatest"     %% "scalatest"    % "3.0.1" % "test"
+
 }
