@@ -1,6 +1,6 @@
 package com.fabian.akka.primes
 
-import Eratosthenes.Messages.{EratosthenesProtocol, Sieve}
+import Eratosthenes.Messages.Sieve
 import akka.typed.scaladsl.Actor
 import akka.typed.{ActorRef, Behavior}
 import com.fabian.akka.primes.Master.Messages.MasterProtocol
@@ -8,7 +8,7 @@ import com.fabian.akka.primes.Master.Messages.MasterProtocol
 object Eratosthenes {
   val name: String = "eratosthenes"
 
-  def apply(): Behavior[EratosthenesProtocol] = {
+  def apply(): Behavior[Sieve] = {
     Actor.immutable {
       case (context, Sieve(parent, primes, remaining)) =>
         remaining match {
@@ -27,13 +27,11 @@ object Eratosthenes {
 
   object Messages {
 
-    sealed trait EratosthenesProtocol extends Product with Serializable
-
     final case class Sieve(
       master: ActorRef[MasterProtocol],
       primes: List[Int],
       remaining: List[Int]
-    ) extends EratosthenesProtocol
+    )
 
   }
 
